@@ -130,12 +130,3 @@ class GameScene: SKScene {
         }
     }
 }
-
-//        let tap = UITapGestureRecognizer(target: self, action: #selector(onTap(_:))) // создадим tap
-//        fullScreenView.addGestureRecognizer(tap)// 20m добавляем tap на Вью
-//    }
-//
-//    //нам нужны будут параметры(UITapGestureRecognizer), чтобы выцепить из него Вьюшку
-//    @objc func onTap(_ recognizer: UITapGestureRecognizer) { //параметром будет приходить наш рекогнайзер
-//        guard let targetView = recognizer.view else {return} //берем из нашего рекогнайзера и выдираем Вьюшку, к которой он приделан; тк recognizer.view опционал, то его надо прикрыть гуардом
-//        targetView.removeFromSuperview()
