@@ -12,4 +12,18 @@ class Bird: SKSpriteNode {
     var baseY: CGFloat = 0.0
     var flyUpSpeed: CGFloat = 28.0
     var isOnMonsterLine = true //Если да, то она может подняться вверх
+    
+    func setupPhysicsBody() {
+        if let birdTexture = texture { //поскольку texture — это опционал SKSpriteNode
+            physicsBody = SKPhysicsBody(texture: birdTexture, size: size)
+            physicsBody?.isDynamic = true//физДвижок будет управлять движением объекта; false - если не хотим, чтобы объект перемещался саморпоизвольно из-за столкновений/гравитации
+            physicsBody?.affectedByGravity = false
+            physicsBody?.density = 5.0
+            physicsBody?.allowsRotation = false
+            physicsBody?.angularDamping = 1.0//насколько сильно объект сопротивляется вращению. Меньшее значение позволяет объекту вращаться свободнее, высокое - напротив - сложнее вращаться
+            physicsBody?.categoryBitMask = PhysicsCategory.bird
+            physicsBody?.collisionBitMask = PhysicsCategory.monster//чтобы на птицу влияли столкновения с монстрами, и что она должна от них отталкиваться(?)
+            physicsBody?.contactTestBitMask = PhysicsCategory.monster | PhysicsCategory.cherry//хотим уведомление, когда будет контакт с тем или иным объектом; пайп | (от pipe — «труба»), позволяет сохранить сразу множество значений в одном свойстве
+        }
+    }
 }
