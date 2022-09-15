@@ -8,10 +8,10 @@
 import SpriteKit
 
 class Bird: SKSpriteNode {
-    var velocity = CGPoint.zero // тоже что и CGPoint(x: 0.0, y: 0.0)
+    var velocity = CGPoint.zero
     var baseY: CGFloat = 0.0
     var flyUpSpeed: CGFloat = 28.0
-    var isOnMonsterLine = true //Если да, то она может подняться вверх
+    var isOnPosition = true //Если да, то она может подняться вверх
     
     func setupPhysicsBody() {
         if let birdTexture = texture { //поскольку texture — это опционал SKSpriteNode
@@ -24,6 +24,20 @@ class Bird: SKSpriteNode {
             physicsBody?.categoryBitMask = PhysicsCategory.bird
             physicsBody?.collisionBitMask = PhysicsCategory.monster//чтобы на птицу влияли столкновения с монстрами, и что она должна от них отталкиваться(?)
             physicsBody?.contactTestBitMask = PhysicsCategory.monster | PhysicsCategory.cherry//хотим уведомление, когда будет контакт с тем или иным объектом; пайп | (от pipe — «труба»), позволяет сохранить сразу множество значений в одном свойстве
+        }
+    }
+    
+    func createSparks() {
+        let bundle = Bundle.main
+        if let sparksPath = bundle.path(forResource: "Spark", ofType: "sks") {
+            let sparksNode = NSKeyedUnarchiver.unarchiveObject(withFile: sparksPath) as! SKEmitterNode
+            sparksNode.position = CGPoint(x: 0.0, y: 0.0)
+            addChild(sparksNode)
+            
+            let waitAction = SKAction.wait(forDuration: 0.5)
+            let removeAction = SKAction.removeFromParent()
+            let waitThenRemove = SKAction.sequence([waitAction,removeAction])
+            sparksNode.run(waitThenRemove)
         }
     }
 }

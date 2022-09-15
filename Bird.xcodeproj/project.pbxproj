@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AD03718928D1F16A006BB209 /* collect.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD03718828D1F16A006BB209 /* collect.wav */; };
+		AD03718B28D1F178006BB209 /* mario_doublejump.wav in Resources */ = {isa = PBXBuildFile; fileRef = AD03718A28D1F178006BB209 /* mario_doublejump.wav */; };
+		AD03718F28D20160006BB209 /* Spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = AD03718E28D20160006BB209 /* Spark.sks */; };
+		AD0AF27928D1E43000C92F88 /* MenuLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD0AF27828D1E43000C92F88 /* MenuLayer.swift */; };
 		ADCF0A3128CC670600840AFB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = ADCF0A3028CC670600840AFB /* AppDelegate.swift */; };
 		ADCF0A3328CC670600840AFB /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = ADCF0A3228CC670600840AFB /* GameScene.sks */; };
 		ADCF0A3528CC670600840AFB /* Actions.sks in Resources */ = {isa = PBXBuildFile; fileRef = ADCF0A3428CC670600840AFB /* Actions.sks */; };
@@ -19,6 +23,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		AD03718828D1F16A006BB209 /* collect.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = collect.wav; sourceTree = "<group>"; };
+		AD03718A28D1F178006BB209 /* mario_doublejump.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = mario_doublejump.wav; sourceTree = "<group>"; };
+		AD03718E28D20160006BB209 /* Spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Spark.sks; sourceTree = "<group>"; };
+		AD0AF27828D1E43000C92F88 /* MenuLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuLayer.swift; sourceTree = "<group>"; };
 		ADCF0A2D28CC670600840AFB /* Bird.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Bird.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ADCF0A3028CC670600840AFB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		ADCF0A3228CC670600840AFB /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -45,6 +53,7 @@
 		ADCF0A2428CC670600840AFB = {
 			isa = PBXGroup;
 			children = (
+				AD0AF27828D1E43000C92F88 /* MenuLayer.swift */,
 				ADCF0A2F28CC670600840AFB /* Bird */,
 				ADCF0A2E28CC670600840AFB /* Products */,
 			);
@@ -65,11 +74,14 @@
 				ADCF0A3228CC670600840AFB /* GameScene.sks */,
 				ADCF0A3428CC670600840AFB /* Actions.sks */,
 				ADCF0A3628CC670600840AFB /* GameScene.swift */,
+				AD03718E28D20160006BB209 /* Spark.sks */,
 				ADCF0A4728CC7C0C00840AFB /* Bird.swift */,
 				ADCF0A3828CC670600840AFB /* GameViewController.swift */,
 				ADCF0A3A28CC670600840AFB /* Main.storyboard */,
 				ADCF0A3D28CC670800840AFB /* Assets.xcassets */,
 				ADCF0A3F28CC670800840AFB /* LaunchScreen.storyboard */,
+				AD03718828D1F16A006BB209 /* collect.wav */,
+				AD03718A28D1F178006BB209 /* mario_doublejump.wav */,
 			);
 			path = Bird;
 			sourceTree = "<group>";
@@ -132,11 +144,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AD03718B28D1F178006BB209 /* mario_doublejump.wav in Resources */,
 				ADCF0A3C28CC670600840AFB /* Main.storyboard in Resources */,
+				AD03718928D1F16A006BB209 /* collect.wav in Resources */,
 				ADCF0A3328CC670600840AFB /* GameScene.sks in Resources */,
 				ADCF0A3E28CC670800840AFB /* Assets.xcassets in Resources */,
 				ADCF0A4128CC670800840AFB /* LaunchScreen.storyboard in Resources */,
 				ADCF0A3528CC670600840AFB /* Actions.sks in Resources */,
+				AD03718F28D20160006BB209 /* Spark.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -149,6 +164,7 @@
 			files = (
 				ADCF0A4828CC7C0C00840AFB /* Bird.swift in Sources */,
 				ADCF0A3728CC670600840AFB /* GameScene.swift in Sources */,
+				AD0AF27928D1E43000C92F88 /* MenuLayer.swift in Sources */,
 				ADCF0A3928CC670600840AFB /* GameViewController.swift in Sources */,
 				ADCF0A3128CC670600840AFB /* AppDelegate.swift in Sources */,
 			);

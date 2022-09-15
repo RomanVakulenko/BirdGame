@@ -15,6 +15,13 @@ struct PhysicsCategory {
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    
+    enum GameState {
+        case notRunning
+        case running
+    }
+    var gameState = GameState.notRunning
+    
     var score: Int = 0
     var highScore: Int = 0
     var lastScoreUpdateTime: TimeInterval = 0.0
@@ -28,7 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var lastUpdateTime: TimeInterval?//время последнего вызова для метода обновления (для отслеживания момента, когда произошло последнее обновление) - чтобы птица двигалась плавно
     
     var bird = Bird(imageNamed: "opt_bird1")
-//    let birdGameOver = Bird(imageNamed: "broken1")
+    let birdGameOver = Bird(imageNamed: "broken2")
     
     override func didMove(to view: SKView) {
         physicsWorld.gravity = CGVector(dx: 0.0, dy: -6.0)//комбинация величины и направления(тянет вниз по-мультяшному на -6, когда гравитация земли -9.8)
@@ -49,7 +56,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let tapGesture = UITapGestureRecognizer(target: self, action: tapMethod)
         view.addGestureRecognizer(tapGesture)
         
-        startGame()
+        let menuBackgroundColor = UIColor.black.withAlphaComponent(0.4)
+        let menuLayer = MenuLayer(color: menuBackgroundColor, size: frame.size)
+        menuLayer.anchorPoint = CGPoint(x: 0.0, y: 0.0)
+        menuLayer.position = CGPoint(x: 0.0, y: 0.0)
+        menuLayer.zPosition = 30
+        menuLayer.name = "menuLayer"
+        menuLayer.display(message: "Press to play", score: nil)
+        addChild(menuLayer)
     }
     
     func resetBird () {
@@ -107,13 +121,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateHighScoreLabelText() {
-    if let highScoreLabel = childNode(withName: "highScoreLabel") as? SKLabelNode {
-           highScoreLabel.text = String(format: "%04d", highScore)
+        if let highScoreLabel = childNode(withName: "highScoreLabel") as? SKLabelNode {
+            highScoreLabel.text = String(format: "%04d", highScore)
         }
     }
-
     
     func startGame() {
+        gameState = .running
         resetBird()
         score = 0
         scrollSpeed = startingScrollSpeed
@@ -130,11 +144,21 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func gameOver() {
+        gameState = .notRunning
+        
         if score > highScore {
-               highScore = score
-               updateHighScoreLabelText()
+            highScore = score
+            updateHighScoreLabelText()
         }
-        startGame()
+        
+        let menuBackgroundColor = UIColor.black.withAlphaComponent(0.4)
+        let menuLayer = MenuLayer(color: menuBackgroundColor,size: frame.size)
+        menuLayer.anchorPoint = CGPoint.zero
+        menuLayer.position = CGPoint.zero
+        menuLayer.zPosition = 30
+        menuLayer.name = "menuLayer"
+        menuLayer.display(message: "Game over, press for new game", score: score)
+        addChild(menuLayer)
     }
     
     func spawnMonster (atPosition position: CGPoint) -> SKSpriteNode {
@@ -226,7 +250,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func updateBird() {
-        if !bird.isOnMonsterLine {
+        if !bird.isOnPosition {
             let velocityY = bird.velocity.y - gravitySpeed//взлет начинается с бОльшей положительной скорости. Затем гравитация будет понемногу снижать эту скорость, пока птица не достигнет пика своего взлета. После этого скорость станет отрицательной, и птица начнет снижаться
             bird.velocity = CGPoint(x: bird.velocity.x, y: velocityY)//обновляем скорость
             let newBirdY: CGFloat = bird.position.y + bird.velocity.y//значение скорости добавим кПозY
@@ -235,7 +259,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if bird.position.y < bird.baseY - 10 {//как только птица снизилась ниже базовой точки, то:
                 bird.position.y = bird.baseY //возвращается к базовой высоте
                 bird.velocity = CGPoint.zero//зависает
-                bird.isOnMonsterLine = true
+                bird.isOnPosition = true
             }
         }
     }
@@ -250,6 +274,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(_ currentTime: TimeInterval) {// Called before each frame is rendered
+        if gameState != .running {
+            return
+        }
         //определяем время, прошедшее с момента последнего вызова метода update
         var elapsedTime: TimeInterval = 0.0 // прошедшее в сек
         scrollSpeed += 0.005//увеличиваем с каждым вызовом update
@@ -269,22 +296,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     @objc func handleTap (tapGesture: UITapGestureRecognizer) {
-        if bird.isOnMonsterLine {
-            bird.velocity = CGPoint(x: 0.0, y: bird.flyUpSpeed)
-            bird.isOnMonsterLine = false
+        if gameState == .running {
+            if bird.isOnPosition {
+                bird.velocity = CGPoint(x: 0.0, y: bird.flyUpSpeed)
+                run(SKAction.playSoundFileNamed("mario_doublejump.wav", waitForCompletion: false))
+                bird.isOnPosition = false
+            }
+        } else {
+            if let menuLayer: SKSpriteNode = childNode(withName: "menuLayer") as? SKSpriteNode {
+                menuLayer.removeFromParent()
+            }
+            startGame()
         }
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
         if contact.bodyA.categoryBitMask == PhysicsCategory.bird && contact.bodyB.categoryBitMask == PhysicsCategory.monster {
+//            addChild(birdGameOver)
+//            birdGameOver.removeFromParent()
             gameOver()
         }
         else if contact.bodyA.categoryBitMask == PhysicsCategory.bird && contact.bodyB.categoryBitMask == PhysicsCategory.cherry {
             if let cherry = contact.bodyB.node as? SKSpriteNode {
+                run(SKAction.playSoundFileNamed("collect.wav", waitForCompletion: false))
                 removeCherry(cherry)
                 score += 20
                 updateScoreLabelText()
+                bird.createSparks()
             }
         }
     }
 }
+
